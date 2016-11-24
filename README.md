@@ -94,10 +94,15 @@ Copy `JSEngine.m` `JSEngine.h` `JSPatch.js` in `JSPatch/` to your project.
 "];
 
 // exec js file from network
-[NSURLConnection sendAsynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"http://cnbang.net/test.js"]] queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-    NSString *script = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    [JPEngine evaluateScript:script];
-}];
+NSURLSession *session = [NSURLSession sharedSession];
+    NSURL *url = [NSURL URLWithString:@"http://ios.mine.com/demo.js"];
+    NSURLSessionTask *task = [session dataTaskWithURL:url
+                                    completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+                                        NSString *script = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                                        [JPEngine evaluateScript:script];
+                                        NSLog(@"4151413131");
+                                    }];
+    [task resume];
 
 // exec local js file
 NSString *sourcePath = [[NSBundle mainBundle] pathForResource:@"sample" ofType:@"js"];
